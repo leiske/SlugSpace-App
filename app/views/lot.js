@@ -14,10 +14,39 @@ export class Lot extends Component {
       alignSelf: 'center',
       flex: 1,
     },
-    headerRight: <View />
+    //headerRight: <View />
   });
 
+  constructor(props){
+    super(props);
+    this.state ={ isLoading: true}
+  }
+
+  componentDidMount(){
+    return fetch(`http://dev.slugspace.xyz/v1/lot/${this.props.navigation.state.params.lotID}`)
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          isLoading: false,
+          dataSource: responseJson,
+        }, function(){
+
+        });
+      }).catch((error) =>{
+        console.error(error);
+      });
+  }
+
   render() {
+
+    if(this.state.isLoading) {
+      return (
+        <View>
+          <Text>Loading ...</Text>
+          </View>
+      )
+    }
+
     return (
       <View style={styles.container}>
         <View style={{ flex: .55 }}>
@@ -40,38 +69,11 @@ export class Lot extends Component {
             />
           </MapView>
         </View>
-
         <View style={styles.menu}>
-          <View style={styles.menuButtonsContainer}>
-            <View style={styles.menuButtons}>
-              <Button
-                raised
-                icon={{ name: 'home', size: 32 }}
-                title={`Core West`}
-                textStyle={{ textAlign: 'center' }}
-              />
-              <Button
-                raised
-                icon={{ name: 'home', size: 32 }}
-                title={`Core West`}
-                textStyle={{ textAlign: 'center' }}
-              />
-            </View>
-            <View style={styles.menuButtons}>
-              <Button
-                raised
-                icon={{ name: 'home', size: 32 }}
-                title={`Core West`}
-                textStyle={{ textAlign: 'center' }}
-              />
-              <Button
-                raised
-                icon={{ name: 'home', size: 32 }}
-                title={`Core West`}
-                textStyle={{ textAlign: 'center' }}
-              />
-            </View>
-          </View>
+              <Text>{this.state.dataSource.name}</Text>
+              <Text>{this.state.dataSource.freeSpaces}</Text>
+              <Text>{this.state.dataSource.totalSpaces}</Text>
+              <Text>{this.state.dataSource.lastUpdated}</Text>
         </View>
       </View>
     );
@@ -92,16 +94,7 @@ const styles = StyleSheet.create({
   menu: {
     flex: .45,
   },
-  menuButtonsContainer: {
-    flex: 1,
-    flexDirection: 'row',
-  },
-  menuButtons: {
-    //flex: 1,
-    justifyContent: 'space-around',
-    width: Dimensions.get('window').width/2,  
-    height: Dimensions.get('window').height/2,
-  }
+
 });
 
 export default Lot;

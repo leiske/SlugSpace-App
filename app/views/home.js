@@ -10,7 +10,7 @@ export class Home extends Component {
       fontWeight: '600',
       textAlign: 'center',
       flex: 1,
-    },
+    }
   }
   render() {
     return (
@@ -18,10 +18,9 @@ export class Home extends Component {
         <Text style={styles.homeText}> Home Page </Text>
         <Button
           raised
-          icon={{ name: 'home', size: 32 }}
           title={`Core West`}
           textStyle={{ textAlign: 'center' }}
-          onPress={() => this.props.navigation.navigate('LotScreen', { lotName: "Core West Parking", lotDesc:"Faculty Only" })}
+          onPress={() => this.props.navigation.navigate('LotScreen', { lotID: 1, lotName: "Core West Parking", lotDesc:"Faculty Only" })}
         />
       </View>
     );
