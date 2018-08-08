@@ -7,49 +7,24 @@ export class Lot extends Component {
 
   static navigationOptions = ({ navigation }) => ({
     title: navigation.state.params.lotName,
-    headerTitleStyle: {
-      fontSize: 26,
-      fontWeight: '600',
-      textAlign: 'center',
-      alignSelf: 'center',
-      flex: 1,
-    },
-    //headerRight: <View />
+    headerRight: <View />,
   });
 
-  constructor(props){
+  constructor(props) {
     super(props);
-    this.state ={ isLoading: true}
+    this.state = { isLoading: true }
   }
 
-  componentDidMount(){
-    return fetch(`http://dev.slugspace.xyz/v1/lot/${this.props.navigation.state.params.lotID}`)
-      .then((response) => response.json())
-      .then((responseJson) => {
-        this.setState({
-          isLoading: false,
-          dataSource: responseJson,
-        }, function(){
-
-        });
-      }).catch((error) =>{
-        console.error(error);
-      });
+  componentDidMount() {
   }
 
   render() {
-
-    if(this.state.isLoading) {
-      return (
-        <View>
-          <Text>Loading ...</Text>
-          </View>
-      )
-    }
+    const { navigation } = this.props;
+    const lot = navigation.getParam('lot', 'no lot');
 
     return (
       <View style={styles.container}>
-        <View style={{ flex: .55 }}>
+        <View style={{ flex: 1 }}>
           <MapView
             style={styles.map}
             initialRegion={{
@@ -68,12 +43,6 @@ export class Lot extends Component {
               description={this.props.navigation.state.params.lotDesc}
             />
           </MapView>
-        </View>
-        <View style={styles.menu}>
-              <Text>{this.state.dataSource.name}</Text>
-              <Text>{this.state.dataSource.freeSpaces}</Text>
-              <Text>{this.state.dataSource.totalSpaces}</Text>
-              <Text>{this.state.dataSource.lastUpdated}</Text>
         </View>
       </View>
     );
