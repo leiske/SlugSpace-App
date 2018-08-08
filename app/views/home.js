@@ -3,6 +3,7 @@ import { RefreshControl } from 'react-native';
 import { WarmGray1, Teal, WarmGray3, WarmGray8, DarkBlue } from '../colors';
 import { Container, Content, Spinner, Grid, Col, Button, Icon, Text } from 'native-base';
 import { LotCard } from '../components/lotCard';
+import * as Animatable from 'react-native-animatable';
 
 export class Home extends Component {
   static navigationOptions = {
@@ -13,6 +14,8 @@ export class Home extends Component {
     super(props);
     this.state = { isLoading: true, fontLoaded: false, isRefreshing: false, errorLoading: false, }
   }
+
+  Icon = Animatable.createAnimatableComponent(Icon);
 
   async fetchParkingAPI() {
     try {
@@ -79,8 +82,11 @@ export class Home extends Component {
         >
           <Grid style={{ alignItems: 'center' }}>
             <Col>
-              {this.state.fontLoaded ? <Icon style={{ textAlign: 'center', color: WarmGray3 }} name='error' type='MaterialIcons' /> : <Text />}
-              <Text style={{ textAlign: 'center', color: WarmGray8 }}>Error loading parking data</Text>
+            <Animatable.View animation="shake">
+            {this.state.fontLoaded ? <Icon style={{ textAlign: 'center', color: WarmGray3, fontSize: 76 }} name='error' type='MaterialIcons' /> : <Text />}
+            </Animatable.View>
+              <Text style={{ textAlign: 'center', color: WarmGray8, fontSize: 20, }}>Error loading parking data</Text>
+              <Text style={{ textAlign: 'center', color: WarmGray8, fontSize: 18, }}>Try again soon</Text>
             </Col>
           </Grid>
         </Content>

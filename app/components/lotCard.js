@@ -2,10 +2,12 @@ import { Card, CardItem, Left, Right, View, Button } from 'native-base';
 import { Icon } from 'react-native-elements';
 import { Image, StyleSheet, Text } from 'react-native';
 import React, { Component } from 'react';
+import * as Animatable from 'react-native-animatable';
 
 export class LotCard extends Component {
     render() {
         return (
+            <Animatable.View animation='slideInLeft'  duration={750 + ((this.props.lot.id-1) * 200)}> 
             <Card style={styles.cardStyle}>
                 <CardItem cardBody>
                     <Image source={{ uri: this.props.lot.imageURI }} style={styles.cardImage} />
@@ -25,6 +27,7 @@ export class LotCard extends Component {
                     </Right>
                 </CardItem>
             </Card>
+            </Animatable.View>
         );
     }
 }
