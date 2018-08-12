@@ -7,12 +7,12 @@ import * as Animatable from 'react-native-animatable';
 
 export class Home extends Component {
   static navigationOptions = {
-    title: 'SlugSpace',
+    title: 'Overview',
   }
 
   constructor(props) {
     super(props);
-    this.state = { isLoading: true, fontLoaded: false, isRefreshing: false, errorLoading: false, }
+    this.state = {cards: [], cardsRef: [], isLoading: true, fontLoaded: false, isRefreshing: false, errorLoading: false, }
   }
 
   Icon = Animatable.createAnimatableComponent(Icon);
@@ -45,21 +45,28 @@ export class Home extends Component {
   }
 
   onRefresh = () => {
+  //   for(var i = 0; i < this.state.cardsRef.length; i++) {
+  //    this.state.cardsRef[i].exit();
+  // }
+    
     this.setState({ isRefreshing: true, })
     this.fetchParkingAPI();
     this.setState({ isRefreshing: false, })
   }
-
   createLotCards() {
-    let cards = []
+    if(this.state.cards.length < this.state.dataSource.length) {
     for (var i = 0; i < this.state.dataSource.length; i++) {
-      cards.push(<LotCard key={i} navigation={this.props.navigation} lot={this.state.dataSource[i]} />)
+      console.log(i);
+      var test2Ref
+      this.state.cards.push(<LotCard key={i} ref={testRef => test2Ref = testRef} navigation={this.props.navigation} lot={this.state.dataSource[i]} />)
+      this.state.cardsRef.push(test2Ref)
     }
-    return cards;
+  }
+    return this.state.cards;
   }
 
   loadingContent = () => {
-    return (<Content contentContainerStyle={{ flex: 1 }} style={{ padding: 10 }}>
+    return (<Content contentContainerStyle={{ flex: 1 }} style={{ padding: 10, backgroundColor: WarmGray1  }}>
       <Grid style={{ alignItems: 'center' }}>
         <Col>
           <Spinner color={Teal} />
@@ -72,7 +79,7 @@ export class Home extends Component {
     //higher priority than loading
     if (this.state.errorLoading) {
       return (
-        <Content contentContainerStyle={{ flex: 1 }} style={{ padding: 10 }}
+        <Content contentContainerStyle={{ flex: 1 }} style={{ padding: 10,backgroundColor: WarmGray1  }}
           refreshControl={
             <RefreshControl
               refreshing={this.state.isRefreshing}

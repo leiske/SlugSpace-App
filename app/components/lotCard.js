@@ -4,10 +4,44 @@ import { Image, StyleSheet, Text } from 'react-native';
 import React, { Component } from 'react';
 import * as Animatable from 'react-native-animatable';
 
+const AnimatableCard = Animatable.createAnimatableComponent(Card);
+
 export class LotCard extends Component {
+    constructor(props) {
+        super(props);
+
+        Animatable.initializeRegistryWithDefinitions({
+        slideInLeft: {
+            from: {
+                'translateX': -500,
+              },
+              to: {
+                'translateX': 0,
+              },
+        }
+      });
+      Animatable.initializeRegistryWithDefinitions({
+        slideOutLeft: {
+            from: {
+                'translateX': 0,
+              },
+              to: {
+                'translateX': -500,
+              },
+        }
+      });
+    }
+
+    handlePress = () => {
+        this.props.navigation.navigate('LotScreen', {lot: this.props.lot})
+    }
+    exit = () => {
+        //this.viewRef.animate('slideOutLeft',250);
+    }
+
     render() {
         return (
-            <Animatable.View animation='slideInLeft'  duration={750 + ((this.props.lot.id-1) * 200)}> 
+            <Animatable.View animation='slideInLeft' ref={ref => this.viewRef = ref} easing='ease-out' duration={500 + ((this.props.lot.id-1) * 50)}> 
             <Card style={styles.cardStyle}>
                 <CardItem cardBody>
                     <Image source={{ uri: this.props.lot.imageURI }} style={styles.cardImage} />
@@ -20,9 +54,9 @@ export class LotCard extends Component {
                         </View>
                     </Left>
                     <Right>
-                        <Button transparent onPress={() => this.props.navigation.navigate('LotScreen', {lot: this.props.lot})}>
+                        <Button transparent onPress={this.exit}>
                             <Text style={styles.cardFreeSpaces}>{this.props.lot.freeSpaces}</Text>
-                            <Icon name='chevron-right' />
+                            <Icon name='chevron-right'/>
                         </Button>
                     </Right>
                 </CardItem>
