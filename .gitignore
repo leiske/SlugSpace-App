@@ -59,3 +59,12 @@ typings/
 
 # next.js build output
 .next
+
+#yarn lock file
+yarn.lock
+
+#expo and babel
+.expo/
+.babelrc
+package-lock.json
+ReactNativeGettingStarted.md

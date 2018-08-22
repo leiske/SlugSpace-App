@@ -12,7 +12,7 @@ export class Home extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {cards: [], cardsRef: [], isLoading: true, fontLoaded: false, isRefreshing: false, errorLoading: false, }
+    this.state = {cards: [], isLoading: true, fontLoaded: false, isRefreshing: false, errorLoading: false, }
   }
 
   Icon = Animatable.createAnimatableComponent(Icon);
@@ -45,21 +45,16 @@ export class Home extends Component {
   }
 
   onRefresh = () => {
-  //   for(var i = 0; i < this.state.cardsRef.length; i++) {
-  //    this.state.cardsRef[i].exit();
-  // }
-    
     this.setState({ isRefreshing: true, })
     this.fetchParkingAPI();
     this.setState({ isRefreshing: false, })
   }
+
   createLotCards() {
     if(this.state.cards.length < this.state.dataSource.length) {
     for (var i = 0; i < this.state.dataSource.length; i++) {
       console.log(i);
-      var test2Ref
-      this.state.cards.push(<LotCard key={i} ref={testRef => test2Ref = testRef} navigation={this.props.navigation} lot={this.state.dataSource[i]} />)
-      this.state.cardsRef.push(test2Ref)
+      this.state.cards.push(<LotCard key={i} navigation={this.props.navigation} lot={this.state.dataSource[i]} />)
     }
   }
     return this.state.cards;

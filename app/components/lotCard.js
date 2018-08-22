@@ -35,13 +35,10 @@ export class LotCard extends Component {
     handlePress = () => {
         this.props.navigation.navigate('LotScreen', {lot: this.props.lot})
     }
-    exit = () => {
-        //this.viewRef.animate('slideOutLeft',250);
-    }
 
     render() {
         return (
-            <Animatable.View animation='slideInLeft' ref={ref => this.viewRef = ref} easing='ease-out' duration={500 + ((this.props.lot.id-1) * 50)}> 
+            <Animatable.View animation='slideInLeft' easing='ease-out' duration={500 + ((this.props.lot.id-1) * 50)}> 
             <Card style={styles.cardStyle}>
                 <CardItem cardBody>
                     <Image source={{ uri: this.props.lot.imageURI }} style={styles.cardImage} />
@@ -54,7 +51,7 @@ export class LotCard extends Component {
                         </View>
                     </Left>
                     <Right>
-                        <Button transparent onPress={this.exit}>
+                        <Button transparent onPress={this.handlePress}>
                             <Text style={styles.cardFreeSpaces}>{this.props.lot.freeSpaces}</Text>
                             <Icon name='chevron-right'/>
                         </Button>
