@@ -39,7 +39,7 @@ export class LotCard extends Component {
     render() {
         return (
             <Animatable.View animation='slideInLeft' easing='ease-out' duration={500 + ((this.props.lot.id-1) * 50)}> 
-            <Card style={styles.cardStyle}>
+            <Card style={styles.cardStyle} >
                 <CardItem cardBody>
                     <Image source={{ uri: this.props.lot.imageURI }} style={styles.cardImage} />
                 </CardItem>

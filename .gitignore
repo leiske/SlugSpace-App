@@ -68,3 +68,7 @@ yarn.lock
 .babelrc
 package-lock.json
 ReactNativeGettingStarted.md
+
+#Authentication related folders / files
+app/Authentication
+app/Authentication/*
