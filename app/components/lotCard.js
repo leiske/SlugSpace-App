@@ -3,6 +3,7 @@ import { Icon } from 'react-native-elements';
 import { Image, StyleSheet, Text } from 'react-native';
 import React, { Component } from 'react';
 import * as Animatable from 'react-native-animatable';
+import { Black, UCGray } from '../colors';
 
 const AnimatableCard = Animatable.createAnimatableComponent(Card);
 
@@ -47,7 +48,7 @@ export class LotCard extends Component {
                     <Left>
                         <View>
                             <Text style={styles.cardTitle}>{this.props.lot.fullName}</Text>
-                            <Text>{this.props.lot.description}</Text>
+                            <Text style={styles.cardDescription}>{this.props.lot.description}</Text>
                         </View>
                     </Left>
                     <Right>
@@ -72,14 +73,20 @@ const styles = StyleSheet.create({
         textAlign: 'left',
         fontWeight: 'bold',
         fontSize: 20,
+        color: Black
     },
-
+    cardDescription: {
+        textAlign: 'left',
+        fontSize: 12,
+        color: UCGray
+    },
     cardFreeSpaces: {
         fontSize: 20,
         textAlign: 'center',
         fontWeight: 'bold',
         paddingRight: 15,
         marginLeft: 15,
+        color: Black
     },
 
     cardImage: {

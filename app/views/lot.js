@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { Image, View, StyleSheet, Text, RefreshControl } from 'react-native';
 import { Container, Content, Button, Grid, Col, Spinner, Tabs, Tab, StyleProvider, Card, CardItem, Left, Right, Body } from 'native-base';
-import { WarmGray1, Teal, WarmGray8, WarmGray3, UCGray } from '../colors';
+import { WarmGray1, Teal, WarmGray8, WarmGray3, UCGray, Black } from '../colors';
 import getTheme from '../../native-base-theme/components';
 import commonColor from '../../native-base-theme/variables/commonColor';
 import * as Animatable from 'react-native-animatable';
 import TimeAgo from 'react-native-timeago';
 import { LineChart, Grid as ChartGrid, Path, YAxis, XAxis } from 'react-native-svg-charts';
-import { APIVer, LotsURL } from '../constants';
+import { APIVer, TrackedLotsURL } from '../constants';
 import { Loading } from '../components/loading';
 import * as shape from 'd3-shape';
 import MapView from 'react-native-maps';
@@ -27,7 +27,7 @@ export class Lot extends Component {
 
   async componentDidMount() {
     try {
-      await Expo.Font.loadAsync({ "MaterialIcons": require("../../node_modules/@expo/vector-icons/fonts/MaterialIcons.ttf") });
+      //await Expo.Font.loadAsync({ "MaterialIcons": require("../../node_modules/@expo/vector-icons/fonts/MaterialIcons.ttf") });
 
       this.setState({ fontLoaded: true });
     } catch (error) {
@@ -54,7 +54,7 @@ export class Lot extends Component {
   }
   onRefresh = () => {
     this.setState({ isRefreshing: true, isLoading: true })
-    AsyncAuthFetch(LotsURL + `/${this.state.lot.id}`)
+    AsyncAuthFetch(TrackedLotsURL + `/${this.state.lot.id}`)
       .then(responseJson => this.setState({ isLoading: false, errorLoading: false, lot: responseJson }))
       .catch(error => {
         console.log(error);
@@ -248,12 +248,14 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 22,
     padding: 1,
+    color: Black
   },
 
   cardText: {
     textAlign: 'left',
     fontSize: 18,
     padding: 0,
+    color: UCGray
   },
 
   cardFreeSpaces: {

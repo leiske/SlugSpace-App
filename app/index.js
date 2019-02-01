@@ -8,6 +8,32 @@ import { RegisterURL } from './constants';
 
 const uniqueId = require("react-native-unique-id");
 
+const AppNavigator = createStackNavigator(
+    {
+        HomeScreen: { screen: Home },
+        LotScreen: { screen: Lot },
+    },
+    {
+        navigationOptions: {
+            headerStyle: {
+                backgroundColor: DarkBlue,
+            },
+            headerTitleStyle: {
+                color: 'white',
+                fontSize: 26,
+                fontWeight: '600',
+                textAlign: 'center',
+                alignSelf: 'center',
+                flex: 1,
+            },
+            headerBackTitleStyle: {
+                color: 'white',
+            },
+            headerTintColor: 'white',
+        },
+    }
+);
+
 async function registerJWT(jsonData) {
     try {
         let response = await fetch(RegisterURL, {
@@ -35,7 +61,7 @@ async function registerJWT(jsonData) {
 
 function getJWT() {
     hasJWT = false;
-    forceNewToken = false; //todo make sure to remove this on production builds
+    forceNewToken = false; //TODO make sure to remove this on production builds
     AsyncStorage.getItem("SlugSpace:JWT")
         .then((jwtItem) => {
             if (!jwtItem || forceNewToken) {
@@ -53,35 +79,8 @@ function getJWT() {
         .catch((error) => console.log(error))
 }
 
-
 //Immediately check if this has a JWT. If not, we will go through the process of generating it by sending off the correct information to the 
 getJWT();
-
-const AppNavigator = createStackNavigator(
-    {
-        HomeScreen: { screen: Home },
-        LotScreen: { screen: Lot },
-    },
-    {
-        navigationOptions: {
-            headerStyle: {
-                backgroundColor: DarkBlue,
-            },
-            headerTitleStyle: {
-                color: 'white',
-                fontSize: 26,
-                fontWeight: '600',
-                textAlign: 'center',
-                alignSelf: 'center',
-                flex: 1,
-            },
-            headerBackTitleStyle: {
-                color: 'white',
-            },
-            headerTintColor: 'white',
-        },
-    }
-);
 
 AppRegistry.registerComponent('asl', () => App);
 export default AppNavigator;

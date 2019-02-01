@@ -3,4 +3,5 @@ export const BaseURL = 'https://dev.slugspace.xyz/'
 
 export const RegisterURL = BaseURL + APIVer + "register"
 
-export const LotsURL = BaseURL + APIVer + "lot"
+export const TrackedLotsURL = BaseURL + APIVer + "lot"
+export const UntrackedLotsURL = BaseURL + APIVer + "untrackedlot"

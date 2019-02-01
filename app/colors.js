@@ -14,3 +14,5 @@ export const UCGray = '#7C7E7F';
 export const WarmGray8 = '#8F8884';
 export const WarmGray3 = '#BEB6AF';
 export const WarmGray1 = '#DBD5CD';
+
+export const Black = "#000000"
