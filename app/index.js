@@ -5,6 +5,7 @@ import App from '../App';
 import { createStackNavigator } from 'react-navigation';
 import { DarkBlue } from './colors';
 import { RegisterURL } from './constants';
+import { YellowBox } from 'react-native';
 
 const uniqueId = require("react-native-unique-id");
 
@@ -81,6 +82,8 @@ function getJWT() {
 
 //Immediately check if this has a JWT. If not, we will go through the process of generating it by sending off the correct information to the 
 getJWT();
+
+YellowBox.ignoreWarnings(['Warning: isMounted(...) is deprecated', 'Module RCTImageLoader']);
 
 AppRegistry.registerComponent('asl', () => App);
 export default AppNavigator;

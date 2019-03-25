@@ -66,22 +66,22 @@ export class LotCard extends Component {
 
 const styles = StyleSheet.create({
     cardStyle: {
-        flex: 0,
+        flex: 1,
     },
 
     cardTitle: {
         textAlign: 'left',
         fontWeight: 'bold',
-        fontSize: 20,
+        fontSize: 16,
         color: Black
     },
     cardDescription: {
         textAlign: 'left',
-        fontSize: 12,
+        fontSize: 10,
         color: UCGray
     },
     cardFreeSpaces: {
-        fontSize: 20,
+        fontSize: 16,
         textAlign: 'center',
         fontWeight: 'bold',
         paddingRight: 15,

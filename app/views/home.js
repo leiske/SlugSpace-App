@@ -152,11 +152,11 @@ export class Home extends Component {
                 title="Loading..."
               />
             }>
-            <Tabs onChangeTab={(info) => this.onChangeTab(info)}>
-                <Tab heading="Tracked Lots" style={{ backgroundColor: WarmGray1 }}>
+            {/* <Tabs onChangeTab={(info) => this.onChangeTab(info)}> */}
+                {/* <Tab heading="Tracked Lots" style={{ backgroundColor: WarmGray1 }}> */}
                   {this.getTrackedLotCards(0)}
-                </Tab>
-                <Tab heading="All Lots" style={{ backgroundColor: WarmGray1 }}>
+                {/* </Tab> */}
+                {/* <Tab heading="All Lots" style={{ backgroundColor: WarmGray1 }}>
                 <SearchBar
                  placeholder="Lot Name..."                
                  onChangeText={text => console.log(text)}
@@ -164,8 +164,8 @@ export class Home extends Component {
 
                  {this.getUntrackedLotCards(1)}
 
-                </Tab>
-              </Tabs>
+                </Tab> */}
+              {/* </Tabs> */}
           </Content>
         </Container>
       </StyleProvider>
