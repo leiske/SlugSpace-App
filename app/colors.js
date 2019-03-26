@@ -1,6 +1,6 @@
 //http://brand.universityofcalifornia.edu/guidelines/color.html#! 
 export const UCBlue = '#1295D8';
-export const UCGold = '#FFB5111';
+export const UCGold = '#FFB511';
 
 export const DarkBlue = '#005581';
 export const LightBlue = '#72CDF4';

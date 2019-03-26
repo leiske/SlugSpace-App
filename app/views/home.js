@@ -126,7 +126,7 @@ export class Home extends Component {
           <Grid style={{ alignItems: 'center' }}>
             <Col>
               <Animatable.View animation="shake">
-                {this.state.fontLoaded ? <Icon style={{ textAlign: 'center', color: WarmGray3, fontSize: 76 }} name='error' type='MaterialIcons' /> : <Text />}
+                <Icon style={{ textAlign: 'center', color: WarmGray3, fontSize: 76 }} name='error' type='MaterialIcons' />
               </Animatable.View>
               <Text style={{ textAlign: 'center', color: WarmGray8, fontSize: 20, }}>Error loading parking data</Text>
               <Text style={{ textAlign: 'center', color: WarmGray8, fontSize: 18, }}>Try again soon</Text>
@@ -152,20 +152,7 @@ export class Home extends Component {
                 title="Loading..."
               />
             }>
-            {/* <Tabs onChangeTab={(info) => this.onChangeTab(info)}> */}
-                {/* <Tab heading="Tracked Lots" style={{ backgroundColor: WarmGray1 }}> */}
-                  {this.getTrackedLotCards(0)}
-                {/* </Tab> */}
-                {/* <Tab heading="All Lots" style={{ backgroundColor: WarmGray1 }}>
-                <SearchBar
-                 placeholder="Lot Name..."                
-                 onChangeText={text => console.log(text)}
-                 autoCorrect={false}/>
-
-                 {this.getUntrackedLotCards(1)}
-
-                </Tab> */}
-              {/* </Tabs> */}
+            {this.getTrackedLotCards(0)}
           </Content>
         </Container>
       </StyleProvider>

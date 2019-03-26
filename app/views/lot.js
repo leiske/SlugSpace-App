@@ -1,56 +1,37 @@
 import React, { Component } from 'react';
-import { Image, View, StyleSheet, Text, RefreshControl } from 'react-native';
+import { Slider, View, StyleSheet, Text, RefreshControl } from 'react-native';
 import { Container, Content, Button, Grid, Col, Spinner, Tabs, Tab, StyleProvider, Card, CardItem, Left, Right, Body } from 'native-base';
-import { WarmGray1, Teal, WarmGray8, WarmGray3, UCGray, Black } from '../colors';
+import { WarmGray1, Teal, WarmGray8, WarmGray3, UCGray, Black, UCBlue, LightTeal, LightBlue, UCGold, LightGold, DarkGold } from '../colors';
 import getTheme from '../../native-base-theme/components';
 import commonColor from '../../native-base-theme/variables/commonColor';
 import * as Animatable from 'react-native-animatable';
 import TimeAgo from 'react-native-timeago';
-import { APIVer, TrackedLotsURL } from '../constants';
+import { APIVer, TrackedLotsURL, TrackedLotFullInfoURL } from '../constants';
 import { Loading } from '../components/loading';
 import MapView from 'react-native-maps';
-
+import { AnimatedCircularProgress } from 'react-native-circular-progress';
+import { ParkingInformationCard } from '../components/PermitInformationCard';
 
 export class Lot extends Component {
 
   static navigationOptions = ({ navigation }) => ({
-    title: navigation.state.params.lot.fullName,
+    title: navigation.state.params.lot.name,
     headerRight: <View />,
   });
 
   constructor(props) {
     super(props);
-    this.state = { chartData: [], isLoading: true, isRefreshing: false, errorLoading: false, lot: this.props.navigation.getParam('lot', { imageURI: 'https://via.placeholder.com/450x200' })  }
+
+    this.state = {isLoading: false, isRefreshing: false, errorLoading: false, lot: this.props.navigation.getParam('lot', { id: -1 }), value: 0, initialValue: 1  }
   }
 
-  async componentDidMount() {
-    try {
-      this.setState({ fontLoaded: true });
-    } catch (error) {
-      console.log('error loading icon fonts', error);
-    }
-    this.setState({ isLoading: false });
-
-    // this.fetchChartData()
+  componentWillMount() {
+    this.onRefresh()
   }
 
-  async fetchChartData() {
-    try {
-      this.setState({ isLoading: true, });
-      let response = await fetch(`https://dev.slugspace.xyz/${APIVer}/lotdataovertime/${this.state.lot.id}`);
-      if (response.ok) {
-        let responseJson = await response.json();
-        this.setState({ isLoading: false, isRefreshing: false, errorLoading: false, chartData: responseJson})
-        return responseJson;
-      }
-    } catch (error) {
-      console.log('Error requesting lot data', error);
-      this.setState({ errorLoading: true, })
-    }
-  }
   onRefresh = () => {
     this.setState({ isRefreshing: true, isLoading: true })
-    AsyncAuthFetch(TrackedLotsURL + `/${this.state.lot.id}`)
+    AsyncAuthFetch(TrackedLotFullInfoURL + `/${this.state.lot.id}`)
       .then(responseJson => this.setState({ isLoading: false, errorLoading: false, lot: responseJson }))
       .catch(error => {
         console.log(error);
@@ -59,30 +40,77 @@ export class Lot extends Component {
     this.setState({ isRefreshing: false, })
   }
 
+  changeSliderValue(value) {
+    this.setState(() => {
+      return {
+        value: parseFloat(value),
+      };
+    });
+  }
+
+  //Ran after letting go of slider
+  completeSliding(value) {
+  }
+
   OverviewCard = () => {
     return (
-      <Animatable.View animation='slideInLeft' easing='ease-out' duration={500 + ((this.state.lot.id - 1) * 50)}>
-        <Card >
+      <Animatable.View animation='slideInLeft' easing='ease-out' duration={500}>
+        <Card style={{padding: 0,}}>
           <CardItem bordered>
             <Text style={styles.cardTitle}>Lot Overview</Text>
           </CardItem>
           <CardItem>
-            <Left>
-              <Text style={styles.cardText}>Available Spaces:</Text>
-            </Left>
-            <Right>
-              <Text style={styles.cardFreeSpaces}>{this.state.lot.freeSpaces}</Text>
-            </Right>
+            <Body style={{flexDirection:"row", justifyContent: "center"}}>
+              <AnimatedCircularProgress
+                size={150}
+                width={12}
+                fill={(this.state.lot.freeSpaces/this.state.lot.totalSpaces) * 100}
+                arcSweepAngle={300}
+                lineCap={"round"}
+                rotation={-150}
+                tintColor={Teal}
+                backgroundColor={WarmGray3}>
+                {
+                  (fill) => (
+                    <View style={{alignItems:'center'}}>
+                      <Text style={styles.progressText}>
+                        { this.state.lot.freeSpaces }
+                      </Text>
+                      <Text style={{fontSize: 12}}>
+                      Available Spaces
+                      </Text>
+                      </View>
+                  )
+                }
+              </AnimatedCircularProgress>
+            </Body>
           </CardItem>
           <CardItem>
-            <Left>
-              <Text style={styles.cardText}>Total Spaces:</Text>
-            </Left>
-            <Right>
-              <Text style={styles.cardFreeSpaces}>{this.state.lot.totalSpaces}</Text>
-            </Right>
+            <Content style={{flexDirection:'column'}} contentContainerStyle={{flex: 1,alignItems:'stretch',}}>
+              <Slider 
+              minimumValue={0} 
+              maximumValue={14} 
+              value={this.state.initialValue} //set to current hour later..... will fix math 
+              step={1} 
+              style={{flex: 1}} 
+              minimumTrackTintColor={UCGray} 
+              maximumTrackTintColor={UCGray}
+              onValueChange={this.changeSliderValue.bind(this)}
+              onSlidingComplete={this.completeSliding.bind(this)}
+              />
+              <View style={{ flexDirection: 'row', alignItems:'stretch', justifyContent:'space-evenly', flexWrap:'nowrap'}}>
+                <Text style={styles.sliderTime}> 8am</Text>
+                <Text style={styles.sliderTime}> 10am</Text>
+                <Text style={styles.sliderTime}> 12pm</Text>
+                <Text style={styles.sliderTime}>  2pm</Text>
+                <Text style={styles.sliderTime}>  4pm</Text>
+                <Text style={styles.sliderTime}>  6pm</Text>
+                <Text style={styles.sliderTime}>   8pm</Text>          
+                <Text style={styles.sliderTime}>  10pm</Text>          
+              </View>
+            </Content>
           </CardItem>
-          <CardItem>
+          <CardItem footer>
             <Left>
               <Text style={{ fontSize: 12, color: UCGray }}>Last updated </Text>
               <TimeAgo style={{ fontSize: 12, color: UCGray }} time={this.state.lot.lastUpdated} />
@@ -95,6 +123,7 @@ export class Lot extends Component {
     )
   }
 
+  
   MapCard = () => {
     return (
       <Animatable.View animation='slideInLeft' easing='ease-out' duration={700 + ((this.state.lot.id - 1) * 50)}>
@@ -124,10 +153,10 @@ export class Lot extends Component {
           </CardItem>
           <CardItem>
             <Left>
-              <Text style={{ fontSize: 18, padding: 7.5, }}>Directions</Text>
+              <Text style={{ fontSize: 14, padding: 5.5, color: Black }}>Directions</Text>
             </Left>
             <Right>
-              <Text style={{ fontSize: 18 }}>> </Text>{/*TODO change to actual icon at some point*/}
+              <Text style={{ fontSize: 18 , color: Black}}>> </Text>{/*TODO change to actual icon at some point*/}
             </Right>
           </CardItem>
         </Card>
@@ -136,14 +165,15 @@ export class Lot extends Component {
   }
 
   render() {
-    if (!this.state.fontLoaded || this.state.isLoading || this.state.isRefreshing) {
+    if (this.state.isLoading || this.state.isRefreshing) {
       return (
         <Loading />
       );
     }
+
     return (
       <StyleProvider style={getTheme(commonColor)}>
-        <Container style={{ backgroundColor: WarmGray1 }}>
+        <Container style={styles.container}>
           <Content
             refreshControl={
               <RefreshControl
@@ -151,21 +181,11 @@ export class Lot extends Component {
                 onRefresh={this.onRefresh}
                 title="Loading..."
               />}
+              padder
           >
-            <Image source={{ uri: this.state.lot.imageURI }} style={styles.headerImage} />
-            <Tabs>
-              <Tab heading="Parking" style={{ backgroundColor: WarmGray1 }}>
-                <Content padder>
-                  {this.OverviewCard()}
-                  {this.MapCard()}
-                </Content>
-              </Tab>
-              <Tab heading="Predict" style={{ backgroundColor: WarmGray1 }}>
-                <Content>
-                  <Text>Predict here</Text>
-                </Content>
-              </Tab>
-            </Tabs>
+          {this.OverviewCard()}
+          <ParkingInformationCard lot={this.state.lot} animDuration={600} />
+          {this.MapCard()}
           </Content>
         </Container>
       </StyleProvider>
@@ -174,38 +194,48 @@ export class Lot extends Component {
 }
 
 const styles = StyleSheet.create({
+  container:{
+    flex: 1,
+    flexDirection:'row',
+    backgroundColor: WarmGray1 
+  },
+
+  contentPermitInformation:{
+    paddingTop:10,
+    backgroundColor: '#ffffff' 
+  },
+
   cardStyle: {
     flex: 0,
   },
 
-  cardTitle: {
+  permitHeader: {
     textAlign: 'left',
-    fontWeight: 'bold',
-    fontSize: 22,
+    fontSize: 16,
     padding: 1,
     color: Black
   },
 
   cardText: {
     textAlign: 'left',
-    fontSize: 18,
-    padding: 0,
-    color: UCGray
+    fontSize: 16,
+    color: Black
   },
 
   cardFreeSpaces: {
-    fontSize: 20,
+    fontSize: 16,
     textAlign: 'center',
     fontWeight: 'bold',
     paddingRight: 15,
     marginLeft: 15,
   },
 
-  cardImage: {
-    height: 175,
-    width: undefined,
-    flex: 1,
-    alignSelf: 'stretch',
+  cardTitle: {
+    textAlign: 'left',
+    fontSize: 20,
+    fontWeight: '400',
+
+    color: Black
   },
 
   headerImage: {
@@ -217,6 +247,17 @@ const styles = StyleSheet.create({
   map: {
     flex: 1,
     height: 150,
+  },
+
+  progressText: {
+    fontSize: 36,
+    color: Black
+  },
+
+  sliderTime: {
+    fontSize: 12,
+    color: WarmGray3,
+    flex: .15
   }
 
 });
