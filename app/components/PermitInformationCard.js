@@ -1,10 +1,8 @@
 import { Card, CardItem, Left, Right, View, Button, ListItem, Content, List } from 'native-base';
-import { Icon } from 'react-native-elements';
 import { Image, StyleSheet, Text } from 'react-native';
 import React, { Component } from 'react';
 import * as Animatable from 'react-native-animatable';
 import { Black, UCGray } from '../colors';
-import { Loading } from './loading';
 import { Accordion } from './Accordian';
 
 const AnimatableCard = Animatable.createAnimatableComponent(Card);

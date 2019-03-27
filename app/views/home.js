@@ -9,7 +9,6 @@ import { Container, Content, Spinner, Grid, Col, Button, Icon, Text,Tabs, Tab, S
 import { LotCard } from '../components/lotCard';
 import { TrackedLotsURL, UntrackedLotsURL } from '../constants';
 import { Loading } from '../components/loading';
-import { SearchBar } from 'react-native-elements';
 
 export class Home extends Component {
   static navigationOptions = {
@@ -18,34 +17,20 @@ export class Home extends Component {
 
   constructor(props) {
     super(props);
-    this.state = { trackedCards: [], untrackedCards: [], isLoading: true, fontLoaded: false, isRefreshing: false, errorLoading: false, token: "", trackedLotsSource: [], untrackedLotSource: [], currentTab: 0 }
+    this.state = { trackedCards: [], isLoading: true, fontLoaded: false, isRefreshing: false, errorLoading: false, token: "", trackedLotsSource: [], }
   }
 
   Icon = Animatable.createAnimatableComponent(Icon);
 
-  async componentDidMount() {
-    try {
-      await Expo.Font.loadAsync({ "MaterialIcons": require("../../node_modules/@expo/vector-icons/fonts/MaterialIcons.ttf") });
-      await Expo.Font.loadAsync({ "Ionicons": require("../../node_modules/@expo/vector-icons/fonts/Ionicons.ttf") });
-      this.setState({ fontLoaded: true });
-    } catch (error) {
-      console.log('error loading icon fonts', error);
-    }
+  componentWillMount() {
     this.onRefresh()
   }
 
   onRefresh = () => {
-    this.setState({ isRefreshing: true, isLoading: true, currentTab: 0 })
+    this.setState({ isRefreshing: true, isLoading: true })
 
     AsyncAuthFetch(TrackedLotsURL)
-      .then(responseJson => this.setState({ trackedLotsSource: responseJson }))
-      .catch(error => {
-        console.log(error);
-        this.setState({ errorLoading: true, });
-      })
-
-    AsyncAuthFetch(UntrackedLotsURL)
-      .then(responseJson => this.setState({ isLoading: false, errorLoading: false, untrackedLotSource: responseJson }))
+      .then(responseJson => this.setState({ isLoading: false, errorLoading: false, trackedLotsSource: responseJson }))
       .catch(error => {
         console.log(error);
         this.setState({ errorLoading: true, });
@@ -54,61 +39,20 @@ export class Home extends Component {
     this.setState({ isRefreshing: false, })
   }
 
-  createTrackedLotCards = () => {
+  createTrackedLotCards() {
+    this.state.trackedCards = []
     for (var i = 0; i < this.state.trackedLotsSource.length; i++) {
       this.state.trackedCards.push(<LotCard key={i} navigation={this.props.navigation} lot={this.state.trackedLotsSource[i]} />)
     }
     return this.state.trackedCards;
   }
 
-  createUntrackedLotCards = () => {
-    for (var i = 0; i < this.state.untrackedLotSource.length; i++) {
-      this.state.untrackedCards.push(
-        <ListItem key={i} navigation={this.props.navigation} lot={this.state.untrackedLotSource[i]}>
-          <Text>{this.state.untrackedLotSource[i].lotName}</Text>
-        </ListItem>
-      )
-    }
-    return this.state.untrackedCards;
-  }
-
-  getUntrackedLotCards = (tabIndex) => {
-    if (this.state.untrackedCards.length == 0) {
-      this.createUntrackedLotCards();
-    }
-
-    if (this.state.currentTab != tabIndex) {
-      return
-    }
-
-    return (
-      <Content>
-        <List>
-          {this.state.untrackedCards}
-          </List>
-      </Content>
-    );
-  }
-
-  getTrackedLotCards = (tabIndex) => {
-    if (this.state.trackedCards.length == 0) {
-      this.createTrackedLotCards();
-    }
-
-    if (this.state.currentTab != tabIndex) {
-      return
-    }
-
+  getTrackedLotCards() {
     return (
       <Content padder>
-        {this.state.trackedCards}
+        { this.createTrackedLotCards() }
       </Content>
     );
-  }
-
-  //This does not get ran when the page refreshes... Added reseting of tab to onRefresh
-  onChangeTab(info) {
-    this.setState({currentTab: info.i});
   }
 
   render() {
@@ -152,7 +96,7 @@ export class Home extends Component {
                 title="Loading..."
               />
             }>
-            {this.getTrackedLotCards(0)}
+            {this.getTrackedLotCards()}
           </Content>
         </Container>
       </StyleProvider>

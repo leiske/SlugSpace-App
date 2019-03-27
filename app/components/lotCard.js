@@ -1,36 +1,35 @@
-import { Card, CardItem, Left, Right, View, Button } from 'native-base';
-import { Icon } from 'react-native-elements';
+import { Card, CardItem, Left, Right, View, Button, Icon } from 'native-base';
 import { Image, StyleSheet, Text } from 'react-native';
 import React, { Component } from 'react';
 import * as Animatable from 'react-native-animatable';
 import { Black, UCGray } from '../colors';
 
-const AnimatableCard = Animatable.createAnimatableComponent(Card);
-
 export class LotCard extends Component {
     constructor(props) {
         super(props);
+    }
 
+    componentWillMount() {
         Animatable.initializeRegistryWithDefinitions({
-        slideInLeft: {
-            from: {
-                'translateX': -500,
-              },
-              to: {
-                'translateX': 0,
-              },
-        }
-      });
-      Animatable.initializeRegistryWithDefinitions({
-        slideOutLeft: {
-            from: {
-                'translateX': 0,
-              },
-              to: {
-                'translateX': -500,
-              },
-        }
-      });
+            slideInLeft: {
+                from: {
+                    'translateX': -500,
+                  },
+                  to: {
+                    'translateX': 0,
+                  },
+            }
+          });
+          Animatable.initializeRegistryWithDefinitions({
+            slideOutLeft: {
+                from: {
+                    'translateX': 0,
+                  },
+                  to: {
+                    'translateX': -500,
+                  },
+            }
+          });
     }
 
     handlePress = () => {
@@ -54,7 +53,7 @@ export class LotCard extends Component {
                     <Right>
                         <Button transparent onPress={this.handlePress}>
                             <Text style={styles.cardFreeSpaces}>{this.props.lot.freeSpaces}</Text>
-                            <Icon name='chevron-right'/>
+                            <Icon style={{color: Black, fontSize: 16}}name={'arrow-forward'}/>
                         </Button>
                     </Right>
                 </CardItem>
